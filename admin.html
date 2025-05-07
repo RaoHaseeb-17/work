@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: Arial; padding: 30px; background: #f5f5f5; }
+    h2, h3 { color: #333; }
+    ul { list-style-type: none; font-size: 18px; padding-left: 0; }
+    button { margin-top: 20px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h2>Admin Panel - Vote Count</h2>
+
+  <h3>Boys</h3>
+  <ul id="boyVotesList"></ul>
+
+  <h3>Girls</h3>
+  <ul id="girlVotesList"></ul>
+
+  <button onclick="clearVotes()">🧹 Clear All Votes</button>
+
+  <script>
+    // Function to load votes from the backend
+    async function loadVotes() {
+      try {
+        const res = await fetch('/api/admin');  // Changed URL to match backend API
+        const data = await res.json();
+
+        const boyList = document.getElementById('boyVotesList');
+        const girlList = document.getElementById('girlVotesList');
+        boyList.innerHTML = '';
+        girlList.innerHTML = '';
+
+        // ✅ Display boys sorted by votes in descending order
+        const sortedBoys = Object.entries(data.boys)
+          .sort((a, b) => b[1] - a[1])  // Sort by votes in descending order
+          .map(entry => ({ name: entry[0], votes: entry[1] }));
+
+        sortedBoys.forEach(candidate => {
+          const li = document.createElement('li');
+          li.textContent = `${candidate.name}: ${candidate.votes} votes`;
+          boyList.appendChild(li);
+        });
+
+        // ✅ Display girls sorted by votes in descending order
+        const sortedGirls = Object.entries(data.girls)
+          .sort((a, b) => b[1] - a[1])  // Sort by votes in descending order
+          .map(entry => ({ name: entry[0], votes: entry[1] }));
+
+        sortedGirls.forEach(candidate => {
+          const li = document.createElement('li');
+          li.textContent = `${candidate.name}: ${candidate.votes} votes`;
+          girlList.appendChild(li);
+        });
+
+      } catch (err) {
+        console.error("Error loading votes:", err);
+        alert("Failed to load vote data.");
+      }
+    }
+
+    // Call the function to load votes
+    loadVotes();
+    setInterval(loadVotes, 2000);  // Refresh every 2 seconds for live updates
+
+    // Function to clear all votes (needs backend API for clearing votes)
+    async function clearVotes() {
+      try {
+        const res = await fetch('/api/clear-votes', { method: 'POST' });
+        if (res.ok) {
+          alert('All votes have been cleared!');
+          loadVotes();  // Reload vote data after clearing
+        } else {
+          alert('Failed to clear votes.');
+        }
+      } catch (err) {
+        console.error("Error clearing votes:", err);
+        alert("Failed to clear votes.");
+      }
+    }
+  </script>
+</body>
+</html>

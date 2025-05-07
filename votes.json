@@ -1,0 +1,24 @@
+{
+    "boys": {
+      "Ahmed": 7,
+      "Bilal": 1,
+      "haseeb": 3,
+      "Ateeb": 0
+    },
+    "girls": {
+      "Ayesha": 3,
+      "Sana": 3,
+      "Manahil": 5,
+      "Alishba": 0
+    },
+    "emails": [
+      "hasseb@gmail.com",
+      "rao@gmail.com",
+      "ateeb@gmail.com",
+      "raohaseeb@gmail.com",
+      "ahmed@gmail.com",
+      "m.ateeb@gmail.com",
+      "misbah@gmail.com",
+      "misbahusman@gmail.com"
+    ]
+  }
